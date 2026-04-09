@@ -3,6 +3,7 @@
 This project is a desktop-based application designed to streamline the operations of a car rental agency. It manages vehicle inventory, tracks customer information, and processes rental transactions using a Graphical User Interface (GUI).
 
 Built with Java Swing and NetBeans GUI Builder
+
 ---
 
 ## Features
