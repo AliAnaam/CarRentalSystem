@@ -29,4 +29,3 @@ New features and improvements are being added continuously.
 2. Build the project  
 3. Run the `Main` class to launch the application
 
----
