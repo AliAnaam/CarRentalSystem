@@ -11,6 +11,7 @@ package carrentalsystem.gui;
 public class DashboardForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(DashboardForm.class.getName());
+    
 
     /**
      * Creates new form DashboardForm
@@ -36,61 +37,31 @@ public class DashboardForm extends javax.swing.JFrame {
         btnLogout = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("Welcome to Car Rental System");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 20, -1, -1));
 
         btnManageCars.setText("Manage Cars");
         btnManageCars.addActionListener(this::btnManageCarsActionPerformed);
+        getContentPane().add(btnManageCars, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 62, -1, -1));
 
         btnManageCustomers.setText("Manage Customers");
         btnManageCustomers.addActionListener(this::btnManageCustomersActionPerformed);
+        getContentPane().add(btnManageCustomers, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 97, -1, -1));
 
         btnNewBooking.setText("New Booking");
         btnNewBooking.addActionListener(this::btnNewBookingActionPerformed);
+        getContentPane().add(btnNewBooking, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 138, -1, -1));
 
         btnViewRentals.setText("View / Return Rentals");
         btnViewRentals.addActionListener(this::btnViewRentalsActionPerformed);
+        getContentPane().add(btnViewRentals, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 173, -1, -1));
 
         btnLogout.setText("Logout");
         btnLogout.addActionListener(this::btnLogoutActionPerformed);
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(124, 124, 124)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(30, 30, 30)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(btnManageCustomers)
-                            .addComponent(btnManageCars)
-                            .addComponent(btnNewBooking)
-                            .addComponent(btnViewRentals)
-                            .addComponent(btnLogout))))
-                .addContainerGap(12, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(21, 21, 21)
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(btnManageCars)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnManageCustomers)
-                .addGap(18, 18, 18)
-                .addComponent(btnNewBooking)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(btnViewRentals)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnLogout)
-                .addContainerGap(75, Short.MAX_VALUE))
-        );
+        getContentPane().add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 202, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -108,13 +79,13 @@ public class DashboardForm extends javax.swing.JFrame {
     private void btnNewBookingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewBookingActionPerformed
         // TODO add your handling code here:
         new BookingForm().setVisible(true);
-}
+
     }//GEN-LAST:event_btnNewBookingActionPerformed
 
     private void btnViewRentalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRentalsActionPerformed
         // TODO add your handling code here:
         new RentalsForm().setVisible(true);
-}
+
     }//GEN-LAST:event_btnViewRentalsActionPerformed
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed

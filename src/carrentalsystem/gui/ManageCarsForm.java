@@ -116,6 +116,11 @@ public class ManageCarsForm extends javax.swing.JFrame {
                 "ID", "Brand", "Model", "Plate", "Daily Rate", "Status"
             }
         ));
+        tblCars.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCarsMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblCars);
 
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 310, 570, 340));
@@ -311,8 +316,9 @@ public class ManageCarsForm extends javax.swing.JFrame {
         refreshTable();
         JOptionPane.showMessageDialog(this, "Data refreshed!");
     }//GEN-LAST:event_btnRefreshActionPerformed
-     
-    private void tblCarsMouseClicked(java.awt.event.MouseEvent evt) {
+
+    private void tblCarsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCarsMouseClicked
+        // TODO add your handling code here:
         int row = tblCars.getSelectedRow();
         if (row != -1) {
             txtBrand.setText(tableModel.getValueAt(row, 1).toString());
@@ -322,7 +328,9 @@ public class ManageCarsForm extends javax.swing.JFrame {
             cmbStatus.setSelectedItem(tableModel.getValueAt(row, 5).toString());
         }
     }
-  
+    }//GEN-LAST:event_tblCarsMouseClicked
+     
+    
     /**
      * @param args the command line arguments
      */

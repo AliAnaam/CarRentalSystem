@@ -4,6 +4,14 @@
  */
 package carrentalsystem.gui;
 
+import carrentalsystem.model.Customer;
+import carrentalsystem.util.FileManager;
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+
 /**
  *
  * @author alianaam
@@ -11,13 +19,59 @@ package carrentalsystem.gui;
 public class ManageCustomersForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageCustomersForm.class.getName());
+    
+    private List<Customer> customerList = new ArrayList<>();
+    private int nextCustomerId = 1;
+    private DefaultTableModel tableModel;
 
     /**
      * Creates new form ManageCustomersForm
      */
     public ManageCustomersForm() {
         initComponents();
+        loadCustomersFromFile();
+        setupTable();
+        refreshTable();
     }
+    private void setupTable() {
+        tableModel = new DefaultTableModel(
+            new String[]{"ID", "Full Name", "Phone", "Email", "License Number"}, 0);
+        tblCustomers.setModel(tableModel);
+    }
+    private void loadCustomersFromFile() {
+        customerList.clear();
+        try (BufferedReader br = new BufferedReader(new FileReader("customers.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] p = line.split("\\|");
+                if (p.length == 5) {
+                    Customer c = new Customer(Integer.parseInt(p[0]), p[1], p[2], p[3], p[4]);
+                    customerList.add(c);
+                    if (c.getId() >= nextCustomerId) nextCustomerId = c.getId() + 1;
+                }
+            }
+        } catch (Exception e) {
+            // File not exist yet
+        }
+    }
+    
+    private void refreshTable() {
+        tableModel.setRowCount(0);
+        for (Customer c : customerList) {
+            tableModel.addRow(new Object[]{
+                c.getId(), c.getFullName(), c.getPhone(), c.getEmail(), c.getLicenseNumber()
+            });
+        }
+    }
+    
+    private void clearFields() {
+        txtFullName.setText("");
+        txtPhone.setText("");
+        txtEmail.setText("");
+        txtLicense.setText("");
+        txtSearch.setText("");
+    }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -28,21 +82,209 @@ public class ManageCustomersForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jLabel1 = new javax.swing.JLabel();
+        txtFullName = new javax.swing.JTextField();
+        txtPhone = new javax.swing.JTextField();
+        txtEmail = new javax.swing.JTextField();
+        txtLicense = new javax.swing.JTextField();
+        txtSearch = new javax.swing.JTextField();
+        btnSearch = new javax.swing.JButton();
+        btnAdd = new javax.swing.JButton();
+        btnUpdate = new javax.swing.JButton();
+        btnDelete = new javax.swing.JButton();
+        btnClear = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        tblCustomers = new javax.swing.JTable();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setText("Manage Customers");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, -1, -1));
+
+        txtFullName.addActionListener(this::txtFullNameActionPerformed);
+        getContentPane().add(txtFullName, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, -1, -1));
+        getContentPane().add(txtPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 70, -1, -1));
+
+        txtEmail.addActionListener(this::txtEmailActionPerformed);
+        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, -1, -1));
+        getContentPane().add(txtLicense, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 100, -1));
+
+        txtSearch.setText("Search");
+        getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
+
+        btnSearch.setText("Search");
+        btnSearch.addActionListener(this::btnSearchActionPerformed);
+        getContentPane().add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, -1, -1));
+
+        btnAdd.setBackground(new java.awt.Color(51, 255, 51));
+        btnAdd.setText("Add Customer");
+        btnAdd.addActionListener(this::btnAddActionPerformed);
+        getContentPane().add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
+
+        btnUpdate.setText("Update");
+        btnUpdate.addActionListener(this::btnUpdateActionPerformed);
+        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, -1, -1));
+
+        btnDelete.setBackground(new java.awt.Color(255, 51, 51));
+        btnDelete.setText("Delete");
+        btnDelete.addActionListener(this::btnDeleteActionPerformed);
+        getContentPane().add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 200, -1, -1));
+
+        btnClear.setText("Clear");
+        btnClear.addActionListener(this::btnClearActionPerformed);
+        getContentPane().add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, -1, -1));
+
+        btnRefresh.setText("Refresh");
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+        getContentPane().add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, -1, -1));
+
+        tblCustomers.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
+            },
+            new String [] {
+                "ID", "Full Name", "Phone", "Email", "Licence Number"
+            }
+        ));
+        tblCustomers.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblCustomersMouseClicked(evt);
+            }
+        });
+        jScrollPane1.setViewportView(tblCustomers);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 460, 300));
+
+        jLabel2.setText("Full Name");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, -1));
+
+        jLabel3.setText("Email");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, -1, -1));
+
+        jLabel4.setText("Phone");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, -1, -1));
+
+        jLabel5.setText("License Number");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtFullNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFullNameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtFullNameActionPerformed
+
+    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtEmailActionPerformed
+
+    private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
+        // TODO add your handling code here:
+        try {
+            if (txtFullName.getText().trim().isEmpty() || txtPhone.getText().trim().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Full Name and Phone are required!");
+                return;
+            }
+            Customer cust = new Customer(nextCustomerId++, 
+                    txtFullName.getText().trim(), 
+                    txtPhone.getText().trim(), 
+                    txtEmail.getText().trim(), 
+                    txtLicense.getText().trim());
+
+            customerList.add(cust);
+            FileManager.saveCustomers(customerList);
+            refreshTable();
+            clearFields();
+            JOptionPane.showMessageDialog(this, "Customer added successfully!");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnAddActionPerformed
+
+    private void btnUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUpdateActionPerformed
+        // TODO add your handling code here:
+        int row = tblCustomers.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Select a customer!");
+            return;
+        }
+        try {
+            int id = (int) tableModel.getValueAt(row, 0);
+            Customer cust = customerList.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
+            if (cust != null) {
+                cust.setFullName(txtFullName.getText().trim());
+                cust.setPhone(txtPhone.getText().trim());
+                cust.setEmail(txtEmail.getText().trim());
+                cust.setLicenseNumber(txtLicense.getText().trim());
+                FileManager.saveCustomers(customerList);
+                refreshTable();
+                JOptionPane.showMessageDialog(this, "Customer updated!");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error!");
+        }
+    }//GEN-LAST:event_btnUpdateActionPerformed
+
+    private void btnDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDeleteActionPerformed
+        // TODO add your handling code here:
+        int row = tblCustomers.getSelectedRow();
+        if (row == -1) return;
+        int confirm = JOptionPane.showConfirmDialog(this, "Delete this customer?", "Confirm", JOptionPane.YES_NO_OPTION);
+        if (confirm == JOptionPane.YES_OPTION) {
+            int id = (int) tableModel.getValueAt(row, 0);
+            customerList.removeIf(c -> c.getId() == id);
+            FileManager.saveCustomers(customerList);
+            refreshTable();
+            clearFields();
+        }
+    }//GEN-LAST:event_btnDeleteActionPerformed
+
+    private void btnClearActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnClearActionPerformed
+        // TODO add your handling code here:
+        clearFields();
+    }//GEN-LAST:event_btnClearActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        loadCustomersFromFile();
+        refreshTable();
+    }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
+        // TODO add your handling code here:
+        String keyword = txtSearch.getText().trim().toLowerCase();
+        tableModel.setRowCount(0);
+        for (Customer c : customerList) {
+            if (c.getFullName().toLowerCase().contains(keyword) || 
+                c.getPhone().contains(keyword)) {
+                tableModel.addRow(new Object[]{
+                    c.getId(), c.getFullName(), c.getPhone(), c.getEmail(), c.getLicenseNumber()
+                });
+            }
+        }
+    }//GEN-LAST:event_btnSearchActionPerformed
+
+    private void tblCustomersMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCustomersMouseClicked
+        // TODO add your handling code here:
+        int row = tblCustomers.getSelectedRow();
+        if (row != -1) {
+            txtFullName.setText(tableModel.getValueAt(row, 1).toString());
+            txtPhone.setText(tableModel.getValueAt(row, 2).toString());
+            txtEmail.setText(tableModel.getValueAt(row, 3).toString());
+            txtLicense.setText(tableModel.getValueAt(row, 4).toString());
+        }
+    }
+    }//GEN-LAST:event_tblCustomersMouseClicked
 
     /**
      * @param args the command line arguments
@@ -70,5 +312,23 @@ public class ManageCustomersForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnAdd;
+    private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnDelete;
+    private javax.swing.JButton btnRefresh;
+    private javax.swing.JButton btnSearch;
+    private javax.swing.JButton btnUpdate;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JTable tblCustomers;
+    private javax.swing.JTextField txtEmail;
+    private javax.swing.JTextField txtFullName;
+    private javax.swing.JTextField txtLicense;
+    private javax.swing.JTextField txtPhone;
+    private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
 }

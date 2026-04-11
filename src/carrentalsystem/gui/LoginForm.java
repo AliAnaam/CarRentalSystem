@@ -42,7 +42,7 @@ public class LoginForm extends javax.swing.JFrame {
 
         jLabel2.setText("Username");
 
-        txtUsername.setText("txtUsername");
+        txtUsername.setText("Username");
 
         jLabel3.setText("Password");
 

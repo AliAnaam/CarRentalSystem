@@ -4,6 +4,15 @@
  */
 package carrentalsystem.gui;
 
+import carrentalsystem.model.Car;
+import carrentalsystem.model.Customer;
+import carrentalsystem.model.Rental;
+import carrentalsystem.util.FileManager;
+import java.io.*;
+import java.util.*;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author alianaam
@@ -11,14 +20,79 @@ package carrentalsystem.gui;
 public class BookingForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BookingForm.class.getName());
+    private List<Car> carList = new ArrayList<>();
+    private List<Customer> customerList = new ArrayList<>();
+    private List<Rental> rentalList = new ArrayList<>();
+    private DefaultTableModel tableModel;
 
     /**
      * Creates new form BookingForm
      */
     public BookingForm() {
         initComponents();
+        loadAllData();
+        setupTable();
+        refreshAvailableCars();
+        loadCustomersToCombo();
+    }
+    
+    private void loadAllData() {
+        // Load cars
+        carList.clear();
+        try (BufferedReader br = new BufferedReader(new FileReader("cars.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] p = line.split("\\|");
+                if (p.length == 6) {
+                    carList.add(new Car(Integer.parseInt(p[0]), p[1], p[2], p[3], Double.parseDouble(p[4]), p[5]));
+                }
+            }
+        } catch (Exception e) {}
+        
+        // Load customers
+        customerList.clear();
+        try (BufferedReader br = new BufferedReader(new FileReader("customers.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                String[] p = line.split("\\|");
+                if (p.length == 5) {
+                    customerList.add(new Customer(Integer.parseInt(p[0]), p[1], p[2], p[3], p[4]));
+                }
+            }
+        } catch (Exception e) {}
+        
+        // Load rentals
+        rentalList.clear();
+        try (BufferedReader br = new BufferedReader(new FileReader("rentals.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                // Simple load - we'll improve later if needed
+            }
+        } catch (Exception e) {}
     }
 
+    private void setupTable() {
+        tableModel = new DefaultTableModel(
+            new String[]{"Car ID", "Brand", "Model", "Plate", "Daily Rate"}, 0);
+        tblAvailableCars.setModel(tableModel);
+    }
+    private void refreshAvailableCars() {
+        tableModel.setRowCount(0);
+        for (Car c : carList) {
+            if (c.getStatus().equals("Available")) {
+                tableModel.addRow(new Object[]{
+                    c.getId(), c.getBrand(), c.getModel(), c.getPlateNumber(), c.getDailyRate()
+                });
+            }
+        }
+    }
+    private void loadCustomersToCombo() {
+        cmbCustomer.removeAllItems();
+        for (Customer c : customerList) {
+            cmbCustomer.addItem(c.getId() + " - " + c.getFullName());
+        }
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,21 +102,155 @@ public class BookingForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tblAvailableCars = new javax.swing.JTable();
+        jLabel3 = new javax.swing.JLabel();
+        cmbCustomer = new javax.swing.JComboBox<>();
+        jLabel4 = new javax.swing.JLabel();
+        txtRentalDate = new javax.swing.JTextField();
+        jLabel5 = new javax.swing.JLabel();
+        txtExpectedReturnDate = new javax.swing.JTextField();
+        btnCalculate = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        lblTotal = new javax.swing.JLabel();
+        btnBook = new javax.swing.JButton();
+        btnRefresh = new javax.swing.JButton();
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 400, Short.MAX_VALUE)
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 300, Short.MAX_VALUE)
-        );
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel1.setText("New Car Rental Booking");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, -1, -1));
+
+        jLabel2.setText("Available Cars");
+        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, -1, -1));
+
+        tblAvailableCars.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        jScrollPane2.setViewportView(tblAvailableCars);
+
+        jScrollPane1.setViewportView(jScrollPane2);
+
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 240, 150));
+
+        jLabel3.setText("Select Customer");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 140, -1, -1));
+
+        cmbCustomer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        getContentPane().add(cmbCustomer, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, -1, -1));
+
+        jLabel4.setText("Rental Date (YYYY-MM-DD)");
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, -1, -1));
+        getContentPane().add(txtRentalDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, -1, -1));
+
+        jLabel5.setText("Expected Return Date (YYYY-MM-DD)");
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 200, -1, -1));
+        getContentPane().add(txtExpectedReturnDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 230, -1, -1));
+
+        btnCalculate.setText("Calculate Total");
+        btnCalculate.addActionListener(this::btnCalculateActionPerformed);
+        getContentPane().add(btnCalculate, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, -1, -1));
+
+        jLabel6.setText("Total Amount:");
+        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 300, -1, -1));
+        getContentPane().add(lblTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 320, -1, -1));
+
+        btnBook.setBackground(new java.awt.Color(51, 255, 51));
+        btnBook.setText("Book Now");
+        btnBook.addActionListener(this::btnBookActionPerformed);
+        getContentPane().add(btnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 360, -1, -1));
+
+        btnRefresh.setText("Refresh Available Cars");
+        btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+        getContentPane().add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 380, -1, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btnCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateActionPerformed
+        // TODO add your handling code here:
+        try {
+            String rentalStr = txtRentalDate.getText().trim();
+            String returnStr = txtExpectedReturnDate.getText().trim();
+
+            if (rentalStr.isEmpty() || returnStr.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please enter both dates (YYYY-MM-DD)");
+                return;
+            }
+
+            // Simple days calculation
+            // For real project you can improve this
+            JOptionPane.showMessageDialog(this, "Total calculation coming in next version.\nPlease enter dates in YYYY-MM-DD format.");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error in calculation");
+        }
+    }//GEN-LAST:event_btnCalculateActionPerformed
+
+    private void btnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookActionPerformed
+        // TODO add your handling code here:
+        int row = tblAvailableCars.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a car from the table!");
+            return;
+        }
+        if (cmbCustomer.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Please select a customer!");
+            return;
+        }
+        
+         try {
+            int carId = (int) tableModel.getValueAt(row, 0);
+            String customerStr = cmbCustomer.getSelectedItem().toString();
+            int customerId = Integer.parseInt(customerStr.split(" - ")[0]);
+
+            String rentalDate = txtRentalDate.getText().trim();
+            String expectedReturn = txtExpectedReturnDate.getText().trim();
+
+            if (rentalDate.isEmpty() || expectedReturn.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Please fill rental and return dates!");
+                return;
+            }
+            
+            // Update car status to Rented
+            for (Car c : carList) {
+                if (c.getId() == carId) {
+                    c.setStatus("Rented");
+                    break;
+                }
+            }
+            // Save updated cars
+            FileManager.saveCars(carList);
+
+            JOptionPane.showMessageDialog(this, "✅ Booking Successful!\nCar ID: " + carId + "\nCustomer ID: " + customerId);
+
+            refreshAvailableCars();
+            txtRentalDate.setText("");
+            txtExpectedReturnDate.setText("");
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Booking failed: " + e.getMessage());
+        }
+    }//GEN-LAST:event_btnBookActionPerformed
+
+    private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
+        // TODO add your handling code here:
+        loadAllData();
+        refreshAvailableCars();
+        JOptionPane.showMessageDialog(this, "Available cars refreshed!");
+    }
+    }//GEN-LAST:event_btnRefreshActionPerformed
 
     /**
      * @param args the command line arguments
@@ -70,5 +278,21 @@ public class BookingForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnBook;
+    private javax.swing.JButton btnCalculate;
+    private javax.swing.JButton btnRefresh;
+    private javax.swing.JComboBox<String> cmbCustomer;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblTotal;
+    private javax.swing.JTable tblAvailableCars;
+    private javax.swing.JTextField txtExpectedReturnDate;
+    private javax.swing.JTextField txtRentalDate;
     // End of variables declaration//GEN-END:variables
 }
