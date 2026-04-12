@@ -146,18 +146,18 @@ public class BookingForm extends javax.swing.JFrame {
         getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 240, 150));
 
         jLabel3.setText("Select Customer");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(260, 140, -1, -1));
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 150, -1, -1));
 
         cmbCustomer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(cmbCustomer, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 160, -1, -1));
+        getContentPane().add(cmbCustomer, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 170, -1, -1));
 
         jLabel4.setText("Rental Date (YYYY-MM-DD)");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 140, -1, -1));
-        getContentPane().add(txtRentalDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 160, -1, -1));
+        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, -1, -1));
+        getContentPane().add(txtRentalDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 210, -1, -1));
 
         jLabel5.setText("Expected Return Date (YYYY-MM-DD)");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 200, -1, -1));
-        getContentPane().add(txtExpectedReturnDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 230, -1, -1));
+        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, -1, -1));
+        getContentPane().add(txtExpectedReturnDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 250, -1, -1));
 
         btnCalculate.setText("Calculate Total");
         btnCalculate.addActionListener(this::btnCalculateActionPerformed);
@@ -255,27 +255,7 @@ public class BookingForm extends javax.swing.JFrame {
     /**
      * @param args the command line arguments
      */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new BookingForm().setVisible(true));
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBook;
@@ -295,4 +275,4 @@ public class BookingForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtExpectedReturnDate;
     private javax.swing.JTextField txtRentalDate;
     // End of variables declaration//GEN-END:variables
-}
+
