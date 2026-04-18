@@ -14,20 +14,38 @@ import java.util.*;
  * @author alianaam
  */
 public class DataManager {
+
     private static final DataManager instance = new DataManager();
 
     public static DataManager getInstance() {
         return instance;
     }
+
     private List<Car> carList = new ArrayList<>();
     private List<Customer> customerList = new ArrayList<>();
+    
     private int nextCarId = 1;
     private int nextCustomerId = 1;
 
     private DataManager() {
         loadCars();
         loadCustomers();
+        
+        // Strong shutdown hook
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            saveCars();
+            saveCustomers();
+            System.out.println("✅ FINAL SAVE: All data saved before program exit");
+        }));
     }
+
+    // Force save method
+    public void forceSave() {
+        saveCars();
+        saveCustomers();
+    }
+
+    // ====================== CARS ======================
     public List<Car> getCars() {
         return carList;
     }
@@ -47,49 +65,75 @@ public class DataManager {
         }
         saveCars();
     }
+
     public void deleteCar(int id) {
         carList.removeIf(c -> c.getId() == id);
         saveCars();
     }
 
     private void saveCars() {
-        try (PrintWriter pw = new PrintWriter(new FileWriter("cars.txt"))) {
-            for (Car c : carList) {
-                pw.println(c.toString());
-            }
-            System.out.println("✅ Cars saved: " + carList.size() + " cars");
-        } catch (Exception e) {
-            System.out.println("❌ Error saving cars");
-            e.printStackTrace();
+    try (PrintWriter pw = new PrintWriter(new FileWriter("cars.txt"))) {
+        for (Car c : carList) {
+            pw.println(c.toString());
         }
+        System.out.println("✅ Cars SAVED to file: " + carList.size() + " cars");
+    } catch (Exception e) {
+        System.out.println("❌ FAILED to save cars.txt");
+        e.printStackTrace();
     }
+}
+
     private void loadCars() {
-        carList.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader("cars.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                line = line.trim();
-                if (line.isEmpty()) continue;
-                String[] p = line.split("\\|");
-                if (p.length == 6) {
-                    Car c = new Car(Integer.parseInt(p[0]), p[1], p[2], p[3],
-                            Double.parseDouble(p[4]), p[5]);
+    carList.clear();
+    int loadedCount = 0;
+
+    try (BufferedReader br = new BufferedReader(new FileReader("cars.txt"))) {
+        String line;
+        while ((line = br.readLine()) != null) {
+            line = line.trim();
+            if (line.isEmpty()) continue;
+
+            String[] p = line.split("\\|");
+            
+            // Must have exactly 6 parts
+            if (p.length == 6) {
+                try {
+                    int id = Integer.parseInt(p[0].trim());
+                    String brand = p[1].trim();
+                    String model = p[2].trim();
+                    String plate = p[3].trim();
+                    double rate = Double.parseDouble(p[4].trim());
+                    String status = p[5].trim();
+
+                    Car c = new Car(id, brand, model, plate, rate, status);
                     carList.add(c);
-                    if (c.getId() >= nextCarId) nextCarId = c.getId() + 1;
+                    
+                    if (id >= nextCarId) nextCarId = id + 1;
+                    loadedCount++;
+                } catch (Exception ex) {
+                    System.out.println("Skipping invalid line: " + line);
                 }
+            } else {
+                System.out.println("Skipping malformed line: " + line);
             }
-            System.out.println("✅ Loaded " + carList.size() + " cars from file");
-        } catch (Exception e) {
-            System.out.println("No cars.txt yet - starting empty");
         }
+        
+        System.out.println("✅ Successfully loaded " + loadedCount + " cars from cars.txt");
+        
+    } catch (Exception e) {
+        System.out.println("No cars.txt file found or unable to read it. Starting fresh.");
     }
+}
+
     public int getNextCarId() {
         return nextCarId++;
     }
+
+    // ====================== CUSTOMERS ======================
     public List<Customer> getCustomers() {
         return customerList;
     }
-    
+
     public void addCustomer(Customer customer) {
         customerList.add(customer);
         if (customer.getId() >= nextCustomerId) nextCustomerId = customer.getId() + 1;
@@ -116,11 +160,7 @@ public class DataManager {
             for (Customer c : customerList) {
                 pw.println(c.toString());
             }
-            System.out.println("✅ Customers saved successfully: " + customerList.size() + " customers");
-        } catch (Exception e) {
-            System.out.println("❌ Error saving customers");
-            e.printStackTrace();
-        }
+        } catch (Exception e) {}
     }
 
     private void loadCustomers() {
@@ -137,16 +177,10 @@ public class DataManager {
                     if (c.getId() >= nextCustomerId) nextCustomerId = c.getId() + 1;
                 }
             }
-            System.out.println("✅ Loaded " + customerList.size() + " customers from file");
-        } catch (Exception e) {
-            System.out.println("No customers.txt file yet - starting with empty list");
-        }
+        } catch (Exception e) {}
     }
 
     public int getNextCustomerId() {
         return nextCustomerId++;
     }
-    
-    
-    
 }

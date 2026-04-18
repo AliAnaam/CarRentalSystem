@@ -92,6 +92,7 @@ public class BookForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 18)); // NOI18N
         jLabel1.setText("New Car Rental Booking");
 
         jLabel2.setText("Available Cars");
@@ -130,10 +131,10 @@ public class BookForm extends javax.swing.JFrame {
         btnRefresh.setText("Refresh Available Cars");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
-        btnClose.setText("Close");
+        btnClose.setText("Go Back");
         btnClose.addActionListener(this::btnCloseActionPerformed);
 
-        lblTotal.setText("Total Amount: $0.00");
+        lblTotal.setText("Total Amount: ₺0.00");
 
         jLabel7.setText("Booking Details");
 
@@ -147,30 +148,33 @@ public class BookForm extends javax.swing.JFrame {
                         .addGap(241, 241, 241)
                         .addComponent(jLabel1))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(56, 56, 56)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addComponent(btnRefresh)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(btnClose)))
-                            .addComponent(jLabel2))
-                        .addGap(122, 122, 122)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(56, 56, 56)
+                                .addComponent(btnRefresh)
+                                .addGap(23, 23, 23)
+                                .addComponent(btnClose))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(34, 34, 34)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 384, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel7)
                             .addComponent(jLabel3)
                             .addComponent(cmbCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)
-                            .addComponent(txtRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel5)
-                            .addComponent(txtExpectedReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnBook)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnCalculate)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                    .addComponent(txtExpectedReturnDate, javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(btnCalculate, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addComponent(lblTotal))
-                            .addComponent(btnBook))))
-                .addContainerGap(177, Short.MAX_VALUE))
+                            .addComponent(txtRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, 116, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -207,7 +211,7 @@ public class BookForm extends javax.swing.JFrame {
                             .addComponent(lblTotal))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnBook)))
-                .addContainerGap(229, Short.MAX_VALUE))
+                .addContainerGap(37, Short.MAX_VALUE))
         );
 
         pack();
@@ -225,7 +229,7 @@ public class BookForm extends javax.swing.JFrame {
 
         if (rentalStr.isEmpty() || returnStr.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Please enter both Rental Date and Expected Return Date (YYYY-MM-DD)");
-            lblTotal.setText("Total Amount: $0.00");
+            lblTotal.setText("Total Amount: ₺0.00");
             return;
         }
 
@@ -247,21 +251,21 @@ public class BookForm extends javax.swing.JFrame {
 
         if (days <= 0) {
             JOptionPane.showMessageDialog(this, "Return date must be after rental date!");
-            lblTotal.setText("Total Amount: $0.00");
+            lblTotal.setText("Total Amount: ₺0.00");
             return;
         }
 
         double totalAmount = days * dailyRate;
 
         // Show the result in the label
-        lblTotal.setText(String.format("Total Amount: $%.2f (%d days)", totalAmount, days));
+        lblTotal.setText(String.format("Total Amount: ₺%.2f (%d days)", totalAmount, days));
 
         JOptionPane.showMessageDialog(this, "Calculation done!\n" + 
-            days + " days × $" + dailyRate + " = $" + String.format("%.2f", totalAmount));
+            days + " days × ₺" + dailyRate + " = ₺" + String.format("%.2f", totalAmount));
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Error in calculation.\nMake sure dates are in YYYY-MM-DD format.");
-        lblTotal.setText("Total Amount: $0.00");
+        lblTotal.setText("Total Amount: ₺0.00");
         System.out.println("Calculation error: " + e.getMessage());
     }
     }//GEN-LAST:event_btnCalculateActionPerformed

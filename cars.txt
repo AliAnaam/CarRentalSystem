@@ -1,1 +1,17 @@
-1,Toyota,Corolla,34 ABC 001,1500.0,Available
+1|Fiat|Egea|34 ABC 001|900.0|Available
+2|Toyota|Corolla|34 FBT 002|1400.0|Available
+3|Volkswagen|Golf|34 GKE 003|2000.0|Available
+4|Renault|Clio|34 SRN 004|1100.0|Available
+5|Ford|Courier|34 VCE 004|1600.0|Available
+6|Opel|Corsa|34 GKI 005|1300.0|Available
+7|Fiat|Egea Cross|34 FKP 006|1000.0|Available
+8|Volkswagen|Polo|34 MGU 007|1450.0|Available
+9|Ford|Focus|34 ZFC 008|1400.0|Available
+10|Renault|Captur|34 FAS 009|1500.0|Available
+11|Renault|Megane|34 XRG 010|1650.0|Available
+12|Skoda|Scala|34 UJN 011|1800.0|Available
+13|Peugeot|408|ENP 012|1900.0|Available
+14|Audi|A3|34 AUD 013|3000.0|Available
+15|Volvo|XC90|34 LFB 014|30000.0|Available
+16|BMW|5 Series|34 BMV 020|25000.0|Available
+17|Mercedes-Benz|C 200|34 MER 030|45000.0|Available

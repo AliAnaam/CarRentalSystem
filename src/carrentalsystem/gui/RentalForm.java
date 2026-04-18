@@ -10,8 +10,8 @@ import carrentalsystem.model.Rental;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.util.ArrayList;
-import java.util.List;
-import javax.swing.JOptionPane;
+import java.util.*;
+import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -21,9 +21,7 @@ import javax.swing.table.DefaultTableModel;
 public class RentalForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RentalForm.class.getName());
-    private List<Car> carList = new ArrayList<>();
-    private List<Customer> customerList = new ArrayList<>();
-    private List<Rental> rentalList = new ArrayList<>();
+    private final DataManager dm = DataManager.getInstance();
     private DefaultTableModel tableModel;
 
     /**
@@ -31,57 +29,37 @@ public class RentalForm extends javax.swing.JFrame {
      */
     public RentalForm() {
         initComponents();
-        loadAllData();
         setupTable();
         refreshRentalsTable();
     }
     
-    private void loadAllData() {
-        // Load Cars
-        carList.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader("cars.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] p = line.split("\\|");
-                if (p.length == 6) {
-                    carList.add(new Car(Integer.parseInt(p[0]), p[1], p[2], p[3], Double.parseDouble(p[4]), p[5]));
-                }
-            }
-        } catch (Exception e) {}
-        
-        // Load Customers
-        customerList.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader("customers.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] p = line.split("\\|");
-                if (p.length == 5) {
-                    customerList.add(new Customer(Integer.parseInt(p[0]), p[1], p[2], p[3], p[4]));
-                }
-            }
-        } catch (Exception e) {}
-        
-        // Load Rentals (simplified for now)
-        rentalList.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader("rentals.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                // Basic loading - we'll improve if needed
-            }
-        } catch (Exception e) {}
-    }
-
     private void setupTable() {
         tableModel = new DefaultTableModel(
-            new String[]{"Rental ID", "Car ID", "Customer ID", "Rental Date", "Expected Return", "Status"}, 0);
+            new String[]{"Car ID", "Brand", "Model", "Plate Number", "Daily Rate", "Status"}, 0);
         tblRentals.setModel(tableModel);
     }
+    
     private void refreshRentalsTable() {
         tableModel.setRowCount(0);
-        // For now, show a message since full rental saving is simplified
-        // In real version we would load from rentals.txt
-        JOptionPane.showMessageDialog(this, "Rental return feature is ready.\nYou can extend it further.");
+        int rentedCount = 0;
+
+        for (Car c : dm.getCars()) {
+            if ("Rented".equals(c.getStatus())) {
+                tableModel.addRow(new Object[]{
+                    c.getId(), c.getBrand(), c.getModel(), 
+                    c.getPlateNumber(), c.getDailyRate(), c.getStatus()
+                });
+                rentedCount++;
+            }
+        }
+
+        if (rentedCount == 0) {
+            JOptionPane.showMessageDialog(this, "No active rentals at the moment.");
+        } else {
+            System.out.println("✅ Showing " + rentedCount + " rented cars");
+        }
     }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -122,7 +100,7 @@ public class RentalForm extends javax.swing.JFrame {
         btnReturnSelected.setText("Return Selected Rental");
         btnReturnSelected.addActionListener(this::btnReturnSelectedActionPerformed);
 
-        btnClose.setText("Close");
+        btnClose.setText("Go Back");
         btnClose.addActionListener(this::btnCloseActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -139,7 +117,7 @@ public class RentalForm extends javax.swing.JFrame {
                         .addGap(78, 78, 78)
                         .addComponent(btnClose))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(64, Short.MAX_VALUE))
+                .addContainerGap(55, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -159,8 +137,8 @@ public class RentalForm extends javax.swing.JFrame {
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
-        loadAllData();
         refreshRentalsTable();
+        JOptionPane.showMessageDialog(this, "Rentals list refreshed!");
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void btnReturnSelectedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnReturnSelectedActionPerformed
@@ -171,22 +149,34 @@ public class RentalForm extends javax.swing.JFrame {
             return;
         }
 
-        int confirm = JOptionPane.showConfirmDialog(this, 
-            "Return this rental and update car status to Available?", 
-            "Confirm Return", JOptionPane.YES_NO_OPTION);
+        int carId = (int) tableModel.getValueAt(row, 0);
+        String carBrand = tableModel.getValueAt(row, 1).toString();
+        String carModel = tableModel.getValueAt(row, 2).toString();
 
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Return this car?\n" + carBrand + " " + carModel + " (ID: " + carId + ")", 
+            "Confirm Return", JOptionPane.YES_NO_OPTION);
+        
         if (confirm == JOptionPane.YES_OPTION) {
-            // Here we would update rental status and car status
-            JOptionPane.showMessageDialog(this, "✅ Rental returned successfully!\nPayment processed.");
-            
-            // Refresh data
-            loadAllData();
+            // Change car status back to Available
+            for (Car c : dm.getCars()) {
+                if (c.getId() == carId) {
+                    c.setStatus("Available");
+                    break;
+                }
+            }
+
+            JOptionPane.showMessageDialog(this, "✅ Car returned successfully!\n" +
+                    "Car: " + carBrand + " " + carModel + "\nStatus: Available");
+
             refreshRentalsTable();
         }
+        
     }//GEN-LAST:event_btnReturnSelectedActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         // TODO add your handling code here:
+        new DashboardForm().setVisible(true);
         this.dispose();
     }//GEN-LAST:event_btnCloseActionPerformed
 

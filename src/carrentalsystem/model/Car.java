@@ -41,6 +41,6 @@ public class Car {
 
     @Override
     public String toString() {
-        return id + "," + brand + "," + model + "," + plateNumber + "," + dailyRate + "," + status;
+        return id + "|" + brand + "|" + model + "|" + plateNumber + "|" + dailyRate + "|" + status;
     }
 }

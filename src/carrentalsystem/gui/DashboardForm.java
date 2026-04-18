@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package carrentalsystem.gui;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -90,8 +91,15 @@ public class DashboardForm extends javax.swing.JFrame {
 
     private void btnLogoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLogoutActionPerformed
         // TODO add your handling code here:
+        int confirm = JOptionPane.showConfirmDialog(this, 
+        "Are you sure you want to log out?", 
+        "Logout Confirmation", 
+        JOptionPane.YES_NO_OPTION);
+    
+    if (confirm == JOptionPane.YES_OPTION) {
         new LoginForm().setVisible(true);
         this.dispose();
+    }
         
     }//GEN-LAST:event_btnLogoutActionPerformed
 
