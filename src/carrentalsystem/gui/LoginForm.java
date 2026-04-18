@@ -42,11 +42,12 @@ public class LoginForm extends javax.swing.JFrame {
 
         jLabel2.setText("Username");
 
-        txtUsername.setText("Username");
+        txtUsername.setText("username");
+        txtUsername.addActionListener(this::txtUsernameActionPerformed);
 
         jLabel3.setText("Password");
 
-        txtPassword.setText("txtPassword");
+        txtPassword.setText("password");
 
         btnLogin.setText("Login");
         btnLogin.addActionListener(this::btnLoginActionPerformed);
@@ -125,6 +126,10 @@ public class LoginForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         System.exit(0);
     }//GEN-LAST:event_btnExitActionPerformed
+
+    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtUsernameActionPerformed
 
     /**
      * @param args the command line arguments

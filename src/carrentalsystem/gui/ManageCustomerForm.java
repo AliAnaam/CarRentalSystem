@@ -11,33 +11,27 @@ import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
-
 /**
  *
  * @author alianaam
  */
-public class ManageCustomersForm extends javax.swing.JFrame {
+public class ManageCustomerForm extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageCustomersForm.class.getName());
-    
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageCustomerForm.class.getName());
     private List<Customer> customerList = new ArrayList<>();
     private int nextCustomerId = 1;
     private DefaultTableModel tableModel;
 
     /**
-     * Creates new form ManageCustomersForm
+     * Creates new form ManageCustomerForm
      */
-    public ManageCustomersForm() {
+    public ManageCustomerForm() {
         initComponents();
         loadCustomersFromFile();
         setupTable();
         refreshTable();
     }
-    private void setupTable() {
-        tableModel = new DefaultTableModel(
-            new String[]{"ID", "Full Name", "Phone", "Email", "License Number"}, 0);
-        tblCustomers.setModel(tableModel);
-    }
+    
     private void loadCustomersFromFile() {
         customerList.clear();
         try (BufferedReader br = new BufferedReader(new FileReader("customers.txt"))) {
@@ -53,6 +47,12 @@ public class ManageCustomersForm extends javax.swing.JFrame {
         } catch (Exception e) {
             // File not exist yet
         }
+    }
+    
+    private void setupTable() {
+        tableModel = new DefaultTableModel(
+            new String[]{"ID", "Full Name", "Phone", "Email", "License Number"}, 0);
+        tblCustomers.setModel(tableModel);
     }
     
     private void refreshTable() {
@@ -71,7 +71,6 @@ public class ManageCustomersForm extends javax.swing.JFrame {
         txtLicense.setText("");
         txtSearch.setText("");
     }
-    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -83,9 +82,13 @@ public class ManageCustomersForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
         txtFullName = new javax.swing.JTextField();
-        txtPhone = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
+        txtPhone = new javax.swing.JTextField();
         txtLicense = new javax.swing.JTextField();
         txtSearch = new javax.swing.JTextField();
         btnSearch = new javax.swing.JButton();
@@ -96,64 +99,48 @@ public class ManageCustomersForm extends javax.swing.JFrame {
         btnRefresh = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCustomers = new javax.swing.JTable();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("Manage Customers");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(120, 20, -1, -1));
 
-        txtFullName.addActionListener(this::txtFullNameActionPerformed);
-        getContentPane().add(txtFullName, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 70, -1, -1));
-        getContentPane().add(txtPhone, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 70, -1, -1));
+        jLabel2.setText("Full Name");
 
-        txtEmail.addActionListener(this::txtEmailActionPerformed);
-        getContentPane().add(txtEmail, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 70, -1, -1));
-        getContentPane().add(txtLicense, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 70, 100, -1));
+        jLabel3.setText("Email");
+
+        jLabel4.setText("Phone");
+
+        jLabel5.setText("License Number");
 
         txtSearch.setText("Search");
-        getContentPane().add(txtSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 150, -1, -1));
 
         btnSearch.setText("Search");
         btnSearch.addActionListener(this::btnSearchActionPerformed);
-        getContentPane().add(btnSearch, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 150, -1, -1));
 
-        btnAdd.setBackground(new java.awt.Color(51, 255, 51));
         btnAdd.setText("Add Customer");
         btnAdd.addActionListener(this::btnAddActionPerformed);
-        getContentPane().add(btnAdd, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 200, -1, -1));
 
         btnUpdate.setText("Update");
         btnUpdate.addActionListener(this::btnUpdateActionPerformed);
-        getContentPane().add(btnUpdate, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 200, -1, -1));
 
-        btnDelete.setBackground(new java.awt.Color(255, 51, 51));
         btnDelete.setText("Delete");
         btnDelete.addActionListener(this::btnDeleteActionPerformed);
-        getContentPane().add(btnDelete, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 200, -1, -1));
 
         btnClear.setText("Clear");
         btnClear.addActionListener(this::btnClearActionPerformed);
-        getContentPane().add(btnClear, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 220, -1, -1));
 
         btnRefresh.setText("Refresh");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        getContentPane().add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 220, -1, -1));
 
         tblCustomers.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
                 {null, null, null, null, null},
-                {null, null, null, null, null},
                 {null, null, null, null, null}
             },
             new String [] {
-                "ID", "Full Name", "Phone", "Email", "Licence Number"
+                "ID", "Full Name", "Email", "Phone", "License Number"
             }
         ));
         tblCustomers.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -163,30 +150,89 @@ public class ManageCustomersForm extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblCustomers);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(30, 260, 460, 300));
-
-        jLabel2.setText("Full Name");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 50, -1, -1));
-
-        jLabel3.setText("Email");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(140, 50, -1, -1));
-
-        jLabel4.setText("Phone");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(210, 50, -1, -1));
-
-        jLabel5.setText("License Number");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 50, -1, -1));
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(395, 395, 395)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(93, 93, 93)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel2)
+                                    .addComponent(txtFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(138, 138, 138)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(76, 76, 76)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel4)
+                                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(62, 62, 62)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtLicense, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5)))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnSearch))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnAdd)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnUpdate)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnDelete))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnClear)
+                                .addGap(18, 18, 18)
+                                .addComponent(btnRefresh))))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(126, 126, 126)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(284, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(23, 23, 23)
+                .addComponent(jLabel1)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel3)
+                    .addComponent(jLabel4)
+                    .addComponent(jLabel5))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtFullName, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtEmail, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtPhone, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtLicense, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(31, 31, 31)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnSearch))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnAdd)
+                    .addComponent(btnUpdate)
+                    .addComponent(btnDelete))
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnClear)
+                    .addComponent(btnRefresh))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    private void txtFullNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFullNameActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtFullNameActionPerformed
-
-    private void txtEmailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEmailActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtEmailActionPerformed
 
     private void btnAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAddActionPerformed
         // TODO add your handling code here:
@@ -283,13 +329,32 @@ public class ManageCustomersForm extends javax.swing.JFrame {
             txtEmail.setText(tableModel.getValueAt(row, 3).toString());
             txtLicense.setText(tableModel.getValueAt(row, 4).toString());
         }
-    }
     }//GEN-LAST:event_tblCustomersMouseClicked
 
     /**
      * @param args the command line arguments
      */
-    
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new ManageCustomerForm().setVisible(true));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
@@ -311,4 +376,4 @@ public class ManageCustomersForm extends javax.swing.JFrame {
     private javax.swing.JTextField txtPhone;
     private javax.swing.JTextField txtSearch;
     // End of variables declaration//GEN-END:variables
-
+}

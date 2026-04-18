@@ -17,18 +17,19 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author alianaam
  */
-public class BookingForm extends javax.swing.JFrame {
+public class BookForm extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BookingForm.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BookForm.class.getName());
     private List<Car> carList = new ArrayList<>();
     private List<Customer> customerList = new ArrayList<>();
     private List<Rental> rentalList = new ArrayList<>();
     private DefaultTableModel tableModel;
 
+
     /**
-     * Creates new form BookingForm
+     * Creates new form BookForm
      */
-    public BookingForm() {
+    public BookForm() {
         initComponents();
         loadAllData();
         setupTable();
@@ -92,7 +93,7 @@ public class BookingForm extends javax.swing.JFrame {
             cmbCustomer.addItem(c.getId() + " - " + c.getFullName());
         }
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -104,8 +105,8 @@ public class BookingForm extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
-        jScrollPane1 = new javax.swing.JScrollPane();
         jScrollPane2 = new javax.swing.JScrollPane();
+        jScrollPane1 = new javax.swing.JScrollPane();
         tblAvailableCars = new javax.swing.JTable();
         jLabel3 = new javax.swing.JLabel();
         cmbCustomer = new javax.swing.JComboBox<>();
@@ -115,18 +116,14 @@ public class BookingForm extends javax.swing.JFrame {
         txtExpectedReturnDate = new javax.swing.JTextField();
         btnCalculate = new javax.swing.JButton();
         jLabel6 = new javax.swing.JLabel();
-        lblTotal = new javax.swing.JLabel();
         btnBook = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setText("New Car Rental Booking");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 10, -1, -1));
 
         jLabel2.setText("Available Cars");
-        getContentPane().add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 140, -1, -1));
 
         tblAvailableCars.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -139,45 +136,99 @@ public class BookingForm extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane2.setViewportView(tblAvailableCars);
+        jScrollPane1.setViewportView(tblAvailableCars);
 
-        jScrollPane1.setViewportView(jScrollPane2);
-
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 170, 240, 150));
+        jScrollPane2.setViewportView(jScrollPane1);
 
         jLabel3.setText("Select Customer");
-        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 150, -1, -1));
 
         cmbCustomer.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        getContentPane().add(cmbCustomer, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 170, -1, -1));
 
         jLabel4.setText("Rental Date (YYYY-MM-DD)");
-        getContentPane().add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 190, -1, -1));
-        getContentPane().add(txtRentalDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 210, -1, -1));
 
         jLabel5.setText("Expected Return Date (YYYY-MM-DD)");
-        getContentPane().add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 230, -1, -1));
-        getContentPane().add(txtExpectedReturnDate, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 250, -1, -1));
+
+        txtExpectedReturnDate.addActionListener(this::txtExpectedReturnDateActionPerformed);
 
         btnCalculate.setText("Calculate Total");
         btnCalculate.addActionListener(this::btnCalculateActionPerformed);
-        getContentPane().add(btnCalculate, new org.netbeans.lib.awtextra.AbsoluteConstraints(380, 270, -1, -1));
 
         jLabel6.setText("Total Amount:");
-        getContentPane().add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 300, -1, -1));
-        getContentPane().add(lblTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 320, -1, -1));
 
-        btnBook.setBackground(new java.awt.Color(51, 255, 51));
-        btnBook.setText("Book Now");
+        btnBook.setText("Book now");
         btnBook.addActionListener(this::btnBookActionPerformed);
-        getContentPane().add(btnBook, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 360, -1, -1));
 
         btnRefresh.setText("Refresh Available Cars");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        getContentPane().add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 380, -1, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(241, 241, 241)
+                        .addComponent(jLabel1))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(56, 56, 56)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(122, 122, 122)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jLabel3)
+                                    .addComponent(cmbCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel4)
+                                    .addComponent(txtRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLabel5)
+                                    .addComponent(txtExpectedReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(btnCalculate)
+                                    .addComponent(jLabel6)
+                                    .addComponent(btnBook)
+                                    .addComponent(btnRefresh))))))
+                .addContainerGap(200, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(21, 21, 21)
+                .addComponent(jLabel1)
+                .addGap(95, 95, 95)
+                .addComponent(jLabel2)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel3)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel4)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel5)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtExpectedReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(btnCalculate)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(jLabel6)))
+                .addGap(18, 18, 18)
+                .addComponent(btnBook)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(btnRefresh)
+                .addContainerGap(200, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void txtExpectedReturnDateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtExpectedReturnDateActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtExpectedReturnDateActionPerformed
 
     private void btnCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateActionPerformed
         // TODO add your handling code here:
@@ -249,13 +300,32 @@ public class BookingForm extends javax.swing.JFrame {
         loadAllData();
         refreshAvailableCars();
         JOptionPane.showMessageDialog(this, "Available cars refreshed!");
-    }
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new BookForm().setVisible(true));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBook;
@@ -270,9 +340,8 @@ public class BookingForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblAvailableCars;
     private javax.swing.JTextField txtExpectedReturnDate;
     private javax.swing.JTextField txtRentalDate;
     // End of variables declaration//GEN-END:variables
-
+}

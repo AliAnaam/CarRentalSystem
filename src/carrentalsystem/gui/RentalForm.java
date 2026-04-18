@@ -7,28 +7,29 @@ package carrentalsystem.gui;
 import carrentalsystem.model.Car;
 import carrentalsystem.model.Customer;
 import carrentalsystem.model.Rental;
-import carrentalsystem.util.FileManager;
-import java.io.*;
-import java.util.*;
-import javax.swing.*;
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 
 /**
  *
  * @author alianaam
  */
-public class RentalsForm extends javax.swing.JFrame {
+public class RentalForm extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RentalsForm.class.getName());
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(RentalForm.class.getName());
     private List<Car> carList = new ArrayList<>();
     private List<Customer> customerList = new ArrayList<>();
     private List<Rental> rentalList = new ArrayList<>();
     private DefaultTableModel tableModel;
 
     /**
-     * Creates new form RentalsForm
+     * Creates new form RentalForm
      */
-    public RentalsForm() {
+    public RentalForm() {
         initComponents();
         loadAllData();
         setupTable();
@@ -81,7 +82,7 @@ public class RentalsForm extends javax.swing.JFrame {
         // In real version we would load from rentals.txt
         JOptionPane.showMessageDialog(this, "Rental return feature is ready.\nYou can extend it further.");
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -91,6 +92,7 @@ public class RentalsForm extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jScrollPane2 = new javax.swing.JScrollPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblRentals = new javax.swing.JTable();
         btnRefresh = new javax.swing.JButton();
@@ -98,7 +100,6 @@ public class RentalsForm extends javax.swing.JFrame {
         btnClose = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         tblRentals.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -113,19 +114,45 @@ public class RentalsForm extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblRentals);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 100, 250, 140));
+        jScrollPane2.setViewportView(jScrollPane1);
 
         btnRefresh.setText("Refresh List");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
-        getContentPane().add(btnRefresh, new org.netbeans.lib.awtextra.AbsoluteConstraints(50, 260, -1, -1));
 
         btnReturnSelected.setText("Return Selected Rental");
         btnReturnSelected.addActionListener(this::btnReturnSelectedActionPerformed);
-        getContentPane().add(btnReturnSelected, new org.netbeans.lib.awtextra.AbsoluteConstraints(170, 260, -1, -1));
 
         btnClose.setText("Close");
         btnClose.addActionListener(this::btnCloseActionPerformed);
-        getContentPane().add(btnClose, new org.netbeans.lib.awtextra.AbsoluteConstraints(350, 260, -1, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(76, 76, 76)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(btnRefresh)
+                        .addGap(109, 109, 109)
+                        .addComponent(btnReturnSelected)
+                        .addGap(78, 78, 78)
+                        .addComponent(btnClose))
+                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(209, Short.MAX_VALUE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(66, 66, 66)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnRefresh)
+                    .addComponent(btnReturnSelected)
+                    .addComponent(btnClose))
+                .addContainerGap(216, Short.MAX_VALUE))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -161,19 +188,39 @@ public class RentalsForm extends javax.swing.JFrame {
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
         // TODO add your handling code here:
         this.dispose();
-    }
     }//GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * @param args the command line arguments
      */
-    
+    public static void main(String args[]) {
+        /* Set the Nimbus look and feel */
+        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+         */
+        try {
+            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+                if ("Nimbus".equals(info.getName())) {
+                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    break;
+                }
+            }
+        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
+            logger.log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        //</editor-fold>
+
+        /* Create and display the form */
+        java.awt.EventQueue.invokeLater(() -> new RentalForm().setVisible(true));
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnClose;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnReturnSelected;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable tblRentals;
     // End of variables declaration//GEN-END:variables
-
+}

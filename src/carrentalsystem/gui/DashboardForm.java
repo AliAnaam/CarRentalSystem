@@ -68,23 +68,23 @@ public class DashboardForm extends javax.swing.JFrame {
 
     private void btnManageCarsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageCarsActionPerformed
         // TODO add your handling code here:
-        new ManageCarsForm().setVisible(true);
+        new ManageCarForm().setVisible(true);
     }//GEN-LAST:event_btnManageCarsActionPerformed
 
     private void btnManageCustomersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnManageCustomersActionPerformed
         // TODO add your handling code here:
-        new ManageCustomersForm().setVisible(true);
+        new ManageCustomerForm().setVisible(true);
     }//GEN-LAST:event_btnManageCustomersActionPerformed
 
     private void btnNewBookingActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNewBookingActionPerformed
         // TODO add your handling code here:
-        new BookingForm().setVisible(true);
+        new BookForm().setVisible(true);
 
     }//GEN-LAST:event_btnNewBookingActionPerformed
 
     private void btnViewRentalsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnViewRentalsActionPerformed
         // TODO add your handling code here:
-        new RentalsForm().setVisible(true);
+        new RentalForm().setVisible(true);
 
     }//GEN-LAST:event_btnViewRentalsActionPerformed
 
