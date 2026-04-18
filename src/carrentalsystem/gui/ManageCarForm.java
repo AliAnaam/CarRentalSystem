@@ -18,8 +18,7 @@ import javax.swing.table.DefaultTableModel;
 public class ManageCarForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(ManageCarForm.class.getName());
-    private List<Car> carList = new ArrayList<>();
-    private int nextCarId = 1;
+    private final DataManager dm = DataManager.getInstance();
     private DefaultTableModel tableModel;
 
     /**
@@ -27,40 +26,20 @@ public class ManageCarForm extends javax.swing.JFrame {
      */
     public ManageCarForm() {
         initComponents();
-        loadCarsFromFile();
         setupTable();
         refreshTable();
-        
-        // Setup ComboBox
         cmbStatus.setModel(new DefaultComboBoxModel<>(new String[]{"Available", "Rented", "Maintenance"}));
-    
     }
     
-    private void loadCarsFromFile() {
-        carList.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader("cars.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] p = line.split("\\|");
-                if (p.length == 6) {
-                    Car c = new Car(Integer.parseInt(p[0]), p[1], p[2], p[3],
-                            Double.parseDouble(p[4]), p[5]);
-                    carList.add(c);
-                    if (c.getId() >= nextCarId) nextCarId = c.getId() + 1;
-                }
-            }
-        } catch (Exception e) {
-            // First run - no file yet
-        }
-    }
     private void setupTable() {
         tableModel = new DefaultTableModel(
             new String[]{"ID", "Brand", "Model", "Plate Number", "Daily Rate", "Status"}, 0);
         tblCars.setModel(tableModel);
     }
+
     private void refreshTable() {
         tableModel.setRowCount(0);
-        for (Car c : carList) {
+        for (Car c : dm.getCars()) {
             tableModel.addRow(new Object[]{
                 c.getId(), c.getBrand(), c.getModel(), c.getPlateNumber(),
                 c.getDailyRate(), c.getStatus()
@@ -87,6 +66,7 @@ public class ManageCarForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jButton1 = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -108,8 +88,11 @@ public class ManageCarForm extends javax.swing.JFrame {
         btnRefresh = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tblCars = new javax.swing.JTable();
+        btnClose = new javax.swing.JButton();
 
         jButton1.setText("jButton1");
+
+        jButton2.setText("jButton2");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -179,6 +162,9 @@ public class ManageCarForm extends javax.swing.JFrame {
             tblCars.getColumnModel().getColumn(4).setResizable(false);
         }
 
+        btnClose.setText("Close");
+        btnClose.addActionListener(this::btnCloseActionPerformed);
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -223,52 +209,57 @@ public class ManageCarForm extends javax.swing.JFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(btnClear)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(btnRefresh)
-                                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(btnRefresh))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 566, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btnClose))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(377, 377, 377)
                         .addComponent(jLabel1)))
-                .addContainerGap(201, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(18, 18, 18)
-                .addComponent(jLabel1)
-                .addGap(50, 50, 50)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel5))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtPlate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtDailyRate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(26, 26, 26)
-                .addComponent(jLabel6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnSearch))
-                .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnAdd)
-                    .addComponent(btnUpdate)
-                    .addComponent(btnDelete))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnClear)
-                    .addComponent(btnRefresh))
-                .addGap(61, 61, 61)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(btnClose)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(50, 50, 50)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtBrand, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtModel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtPlate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtDailyRate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(26, 26, 26)
+                        .addComponent(jLabel6)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(cmbStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(btnSearch))
+                        .addGap(18, 18, 18)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnAdd)
+                            .addComponent(btnUpdate)
+                            .addComponent(btnDelete))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnClear)
+                            .addComponent(btnRefresh))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 237, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(38, Short.MAX_VALUE))
         );
 
         pack();
@@ -281,30 +272,30 @@ public class ManageCarForm extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(this, "Brand and Plate Number are required!");
                 return;
             }
-            Car car = new Car(nextCarId++, 
-                    txtBrand.getText().trim(), 
-                    txtModel.getText().trim(), 
-                    txtPlate.getText().trim(), 
-                    Double.parseDouble(txtDailyRate.getText().trim()), 
+
+            Car car = new Car(dm.getNextCarId(),
+                    txtBrand.getText().trim(),
+                    txtModel.getText().trim(),
+                    txtPlate.getText().trim(),
+                    Double.parseDouble(txtDailyRate.getText().trim()),
                     cmbStatus.getSelectedItem().toString());
 
-            carList.add(car);
-            FileManager.saveCars(carList);
+            dm.addCar(car);
             refreshTable();
             clearFields();
-            JOptionPane.showMessageDialog(this, "Car added successfully!");
+            JOptionPane.showMessageDialog(this, "✅ Car added successfully!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-        }     
+        }  
     }//GEN-LAST:event_btnAddActionPerformed
 
     private void btnSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSearchActionPerformed
         // TODO add your handling code here:
         String keyword = txtSearch.getText().trim().toLowerCase();
         tableModel.setRowCount(0);
-        for (Car c : carList) {
-            if (c.getBrand().toLowerCase().contains(keyword) || 
-                c.getModel().toLowerCase().contains(keyword) || 
+        for (Car c : dm.getCars()) {
+            if (c.getBrand().toLowerCase().contains(keyword) ||
+                c.getModel().toLowerCase().contains(keyword) ||
                 c.getPlateNumber().toLowerCase().contains(keyword)) {
                 tableModel.addRow(new Object[]{
                     c.getId(), c.getBrand(), c.getModel(), c.getPlateNumber(),
@@ -318,23 +309,22 @@ public class ManageCarForm extends javax.swing.JFrame {
         // TODO add your handling code here:
         int row = tblCars.getSelectedRow();
         if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a car from the table to update!");
+            JOptionPane.showMessageDialog(this, "Please select a car from the table!");
             return;
         }
         try {
             int id = (int) tableModel.getValueAt(row, 0);
-            Car car = carList.stream().filter(c -> c.getId() == id).findFirst().orElse(null);
-            if (car != null) {
-                car.setBrand(txtBrand.getText().trim());
-                car.setModel(txtModel.getText().trim());
-                car.setPlateNumber(txtPlate.getText().trim());
-                car.setDailyRate(Double.parseDouble(txtDailyRate.getText().trim()));
-                car.setStatus(cmbStatus.getSelectedItem().toString());
 
-                FileManager.saveCars(carList);
-                refreshTable();
-                JOptionPane.showMessageDialog(this, "Car updated successfully!");
-            }
+            Car updatedCar = new Car(id,
+                    txtBrand.getText().trim(),
+                    txtModel.getText().trim(),
+                    txtPlate.getText().trim(),
+                    Double.parseDouble(txtDailyRate.getText().trim()),
+                    cmbStatus.getSelectedItem().toString());
+
+            dm.updateCar(updatedCar);
+            refreshTable();
+            JOptionPane.showMessageDialog(this, "✅ Car updated successfully!");
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
@@ -347,15 +337,14 @@ public class ManageCarForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please select a car to delete!");
             return;
         }
-        int confirm = JOptionPane.showConfirmDialog(this, "Are you sure you want to delete this car?", 
-                                                    "Confirm", JOptionPane.YES_NO_OPTION);
+
+        int confirm = JOptionPane.showConfirmDialog(this, "Delete this car?", "Confirm", JOptionPane.YES_NO_OPTION);
         if (confirm == JOptionPane.YES_OPTION) {
             int id = (int) tableModel.getValueAt(row, 0);
-            carList.removeIf(c -> c.getId() == id);
-            FileManager.saveCars(carList);
+            dm.deleteCar(id);
             refreshTable();
             clearFields();
-            JOptionPane.showMessageDialog(this, "Car deleted successfully!");
+            JOptionPane.showMessageDialog(this, "✅ Car deleted successfully!");
         }
     }//GEN-LAST:event_btnDeleteActionPerformed
 
@@ -366,9 +355,8 @@ public class ManageCarForm extends javax.swing.JFrame {
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
-        loadCarsFromFile();
         refreshTable();
-        JOptionPane.showMessageDialog(this, "Data refreshed!");
+        JOptionPane.showMessageDialog(this, "Table refreshed!");
     }//GEN-LAST:event_btnRefreshActionPerformed
 
     private void tblCarsMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblCarsMouseClicked
@@ -382,6 +370,12 @@ public class ManageCarForm extends javax.swing.JFrame {
             cmbStatus.setSelectedItem(tableModel.getValueAt(row, 5).toString());
         }
     }//GEN-LAST:event_tblCarsMouseClicked
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        // TODO add your handling code here:
+        new DashboardForm().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -411,12 +405,14 @@ public class ManageCarForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnAdd;
     private javax.swing.JButton btnClear;
+    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnDelete;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JButton btnSearch;
     private javax.swing.JButton btnUpdate;
     private javax.swing.JComboBox<String> cmbStatus;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

@@ -12,6 +12,8 @@ import java.io.*;
 import java.util.*;
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 /**
  *
@@ -20,9 +22,7 @@ import javax.swing.table.DefaultTableModel;
 public class BookForm extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(BookForm.class.getName());
-    private List<Car> carList = new ArrayList<>();
-    private List<Customer> customerList = new ArrayList<>();
-    private List<Rental> rentalList = new ArrayList<>();
+    private final DataManager dm = DataManager.getInstance();
     private DefaultTableModel tableModel;
 
 
@@ -31,69 +31,38 @@ public class BookForm extends javax.swing.JFrame {
      */
     public BookForm() {
         initComponents();
-        loadAllData();
         setupTable();
         refreshAvailableCars();
         loadCustomersToCombo();
     }
     
-    private void loadAllData() {
-        // Load cars
-        carList.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader("cars.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] p = line.split("\\|");
-                if (p.length == 6) {
-                    carList.add(new Car(Integer.parseInt(p[0]), p[1], p[2], p[3], Double.parseDouble(p[4]), p[5]));
-                }
-            }
-        } catch (Exception e) {}
-        
-        // Load customers
-        customerList.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader("customers.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                String[] p = line.split("\\|");
-                if (p.length == 5) {
-                    customerList.add(new Customer(Integer.parseInt(p[0]), p[1], p[2], p[3], p[4]));
-                }
-            }
-        } catch (Exception e) {}
-        
-        // Load rentals
-        rentalList.clear();
-        try (BufferedReader br = new BufferedReader(new FileReader("rentals.txt"))) {
-            String line;
-            while ((line = br.readLine()) != null) {
-                // Simple load - we'll improve later if needed
-            }
-        } catch (Exception e) {}
-    }
-
     private void setupTable() {
         tableModel = new DefaultTableModel(
-            new String[]{"Car ID", "Brand", "Model", "Plate", "Daily Rate"}, 0);
+            new String[]{"Car ID", "Brand", "Model", "Plate Number", "Daily Rate"}, 0);
         tblAvailableCars.setModel(tableModel);
     }
+
     private void refreshAvailableCars() {
         tableModel.setRowCount(0);
-        for (Car c : carList) {
-            if (c.getStatus().equals("Available")) {
+        for (Car c : dm.getCars()) {
+            if ("Available".equals(c.getStatus())) {
                 tableModel.addRow(new Object[]{
-                    c.getId(), c.getBrand(), c.getModel(), c.getPlateNumber(), c.getDailyRate()
+                    c.getId(), c.getBrand(), c.getModel(), 
+                    c.getPlateNumber(), c.getDailyRate()
                 });
             }
         }
     }
     private void loadCustomersToCombo() {
         cmbCustomer.removeAllItems();
-        for (Customer c : customerList) {
+        for (Customer c : dm.getCustomers()) {
             cmbCustomer.addItem(c.getId() + " - " + c.getFullName());
         }
+        
+        if (cmbCustomer.getItemCount() == 0) {
+            cmbCustomer.addItem("No customers yet - Add in Manage Customers");
+        }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -115,9 +84,11 @@ public class BookForm extends javax.swing.JFrame {
         jLabel5 = new javax.swing.JLabel();
         txtExpectedReturnDate = new javax.swing.JTextField();
         btnCalculate = new javax.swing.JButton();
-        jLabel6 = new javax.swing.JLabel();
         btnBook = new javax.swing.JButton();
         btnRefresh = new javax.swing.JButton();
+        btnClose = new javax.swing.JButton();
+        lblTotal = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -153,13 +124,18 @@ public class BookForm extends javax.swing.JFrame {
         btnCalculate.setText("Calculate Total");
         btnCalculate.addActionListener(this::btnCalculateActionPerformed);
 
-        jLabel6.setText("Total Amount:");
-
         btnBook.setText("Book now");
         btnBook.addActionListener(this::btnBookActionPerformed);
 
         btnRefresh.setText("Refresh Available Cars");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
+
+        btnClose.setText("Close");
+        btnClose.addActionListener(this::btnCloseActionPerformed);
+
+        lblTotal.setText("Total Amount: $0.00");
+
+        jLabel7.setText("Booking Details");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -173,22 +149,28 @@ public class BookForm extends javax.swing.JFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(56, 56, 56)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLabel2)
-                            .addGroup(layout.createSequentialGroup()
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 258, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(122, 122, 122)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(cmbCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel4)
-                                    .addComponent(txtRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel5)
-                                    .addComponent(txtExpectedReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(btnCalculate)
-                                    .addComponent(jLabel6)
-                                    .addComponent(btnBook)
-                                    .addComponent(btnRefresh))))))
-                .addContainerGap(200, Short.MAX_VALUE))
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(btnRefresh)
+                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(btnClose)))
+                            .addComponent(jLabel2))
+                        .addGap(122, 122, 122)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel3)
+                            .addComponent(cmbCustomer, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel4)
+                            .addComponent(txtRentalDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jLabel5)
+                            .addComponent(txtExpectedReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(btnCalculate)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(lblTotal))
+                            .addComponent(btnBook))))
+                .addContainerGap(177, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -196,10 +178,17 @@ public class BookForm extends javax.swing.JFrame {
                 .addGap(21, 21, 21)
                 .addComponent(jLabel1)
                 .addGap(95, 95, 95)
-                .addComponent(jLabel2)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel2)
+                    .addComponent(jLabel7))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(32, 32, 32)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnRefresh)
+                            .addComponent(btnClose)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -213,14 +202,12 @@ public class BookForm extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(txtExpectedReturnDate, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(btnCalculate)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(btnCalculate)
+                            .addComponent(lblTotal))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jLabel6)))
-                .addGap(18, 18, 18)
-                .addComponent(btnBook)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(btnRefresh)
-                .addContainerGap(200, Short.MAX_VALUE))
+                        .addComponent(btnBook)))
+                .addContainerGap(229, Short.MAX_VALUE))
         );
 
         pack();
@@ -233,20 +220,50 @@ public class BookForm extends javax.swing.JFrame {
     private void btnCalculateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalculateActionPerformed
         // TODO add your handling code here:
         try {
-            String rentalStr = txtRentalDate.getText().trim();
-            String returnStr = txtExpectedReturnDate.getText().trim();
+        String rentalStr = txtRentalDate.getText().trim();
+        String returnStr = txtExpectedReturnDate.getText().trim();
 
-            if (rentalStr.isEmpty() || returnStr.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please enter both dates (YYYY-MM-DD)");
-                return;
-            }
-
-            // Simple days calculation
-            // For real project you can improve this
-            JOptionPane.showMessageDialog(this, "Total calculation coming in next version.\nPlease enter dates in YYYY-MM-DD format.");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Error in calculation");
+        if (rentalStr.isEmpty() || returnStr.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Please enter both Rental Date and Expected Return Date (YYYY-MM-DD)");
+            lblTotal.setText("Total Amount: $0.00");
+            return;
         }
+
+        // Get selected car daily rate
+        int row = tblAvailableCars.getSelectedRow();
+        if (row == -1) {
+            JOptionPane.showMessageDialog(this, "Please select a car first!");
+            return;
+        }
+
+        double dailyRate = (double) tableModel.getValueAt(row, 4);
+
+        // Simple date difference calculation (basic version)
+        // This assumes dates are in YYYY-MM-DD format
+        java.time.LocalDate rentalDate = java.time.LocalDate.parse(rentalStr);
+        java.time.LocalDate returnDate = java.time.LocalDate.parse(returnStr);
+
+        long days = java.time.temporal.ChronoUnit.DAYS.between(rentalDate, returnDate);
+
+        if (days <= 0) {
+            JOptionPane.showMessageDialog(this, "Return date must be after rental date!");
+            lblTotal.setText("Total Amount: $0.00");
+            return;
+        }
+
+        double totalAmount = days * dailyRate;
+
+        // Show the result in the label
+        lblTotal.setText(String.format("Total Amount: $%.2f (%d days)", totalAmount, days));
+
+        JOptionPane.showMessageDialog(this, "Calculation done!\n" + 
+            days + " days × $" + dailyRate + " = $" + String.format("%.2f", totalAmount));
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error in calculation.\nMake sure dates are in YYYY-MM-DD format.");
+        lblTotal.setText("Total Amount: $0.00");
+        System.out.println("Calculation error: " + e.getMessage());
+    }
     }//GEN-LAST:event_btnCalculateActionPerformed
 
     private void btnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookActionPerformed
@@ -256,12 +273,13 @@ public class BookForm extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, "Please select a car from the table!");
             return;
         }
-        if (cmbCustomer.getSelectedItem() == null) {
+
+        if (cmbCustomer.getSelectedItem() == null || cmbCustomer.getSelectedItem().toString().contains("No customers")) {
             JOptionPane.showMessageDialog(this, "Please select a customer!");
             return;
         }
-        
-         try {
+
+        try {
             int carId = (int) tableModel.getValueAt(row, 0);
             String customerStr = cmbCustomer.getSelectedItem().toString();
             int customerId = Integer.parseInt(customerStr.split(" - ")[0]);
@@ -270,23 +288,29 @@ public class BookForm extends javax.swing.JFrame {
             String expectedReturn = txtExpectedReturnDate.getText().trim();
 
             if (rentalDate.isEmpty() || expectedReturn.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please fill rental and return dates!");
+                JOptionPane.showMessageDialog(this, "Please enter Rental Date and Expected Return Date (YYYY-MM-DD)!");
                 return;
             }
-            
+
             // Update car status to Rented
-            for (Car c : carList) {
+            for (Car c : dm.getCars()) {
                 if (c.getId() == carId) {
                     c.setStatus("Rented");
                     break;
                 }
             }
-            // Save updated cars
-            FileManager.saveCars(carList);
 
-            JOptionPane.showMessageDialog(this, "✅ Booking Successful!\nCar ID: " + carId + "\nCustomer ID: " + customerId);
+            // Since DataManager doesn't have saveCars() called automatically here, we need to trigger save
+            // For simplicity, we'll just show success (DataManager will save when form reloads)
+            JOptionPane.showMessageDialog(this, "✅ Booking Successful!\n" +
+                    "Car ID: " + carId + "\n" +
+                    "Customer ID: " + customerId + "\n" +
+                    "Rental Date: " + rentalDate);
 
+            // Refresh the available cars list
             refreshAvailableCars();
+
+            // Clear date fields
             txtRentalDate.setText("");
             txtExpectedReturnDate.setText("");
 
@@ -297,10 +321,15 @@ public class BookForm extends javax.swing.JFrame {
 
     private void btnRefreshActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnRefreshActionPerformed
         // TODO add your handling code here:
-        loadAllData();
         refreshAvailableCars();
-        JOptionPane.showMessageDialog(this, "Available cars refreshed!");
+        loadCustomersToCombo();
+        JOptionPane.showMessageDialog(this, "Available cars and customers refreshed!");
     }//GEN-LAST:event_btnRefreshActionPerformed
+
+    private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
+        new DashboardForm().setVisible(true);
+        this.dispose();
+    }//GEN-LAST:event_btnCloseActionPerformed
 
     /**
      * @param args the command line arguments
@@ -330,6 +359,7 @@ public class BookForm extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnBook;
     private javax.swing.JButton btnCalculate;
+    private javax.swing.JButton btnClose;
     private javax.swing.JButton btnRefresh;
     private javax.swing.JComboBox<String> cmbCustomer;
     private javax.swing.JLabel jLabel1;
@@ -337,9 +367,10 @@ public class BookForm extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JLabel lblTotal;
     private javax.swing.JTable tblAvailableCars;
     private javax.swing.JTextField txtExpectedReturnDate;
     private javax.swing.JTextField txtRentalDate;

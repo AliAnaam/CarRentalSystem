@@ -139,7 +139,7 @@ public class RentalForm extends javax.swing.JFrame {
                         .addGap(78, 78, 78)
                         .addComponent(btnClose))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(209, Short.MAX_VALUE))
+                .addContainerGap(64, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -151,7 +151,7 @@ public class RentalForm extends javax.swing.JFrame {
                     .addComponent(btnRefresh)
                     .addComponent(btnReturnSelected)
                     .addComponent(btnClose))
-                .addContainerGap(216, Short.MAX_VALUE))
+                .addContainerGap(53, Short.MAX_VALUE))
         );
 
         pack();

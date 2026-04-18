@@ -1,0 +1,1 @@
+1,Toyota,Corolla,34 ABC 001,1500.0,Available

@@ -24,8 +24,32 @@ public class FileManager {
             for (Object obj : list) {
                 pw.println(obj.toString());
             }
+            System.out.println("✅ Saved " + list.size() + " items to " + filename); // Debug message
         } catch (IOException e) {
+            System.out.println("❌ Error saving to " + filename);
             e.printStackTrace();
         }
+    }
+
+    // Add this helper to load cars (we'll use it in forms)
+    public static List<Car> loadCars() {
+        List<Car> list = new java.util.ArrayList<>();
+        try (BufferedReader br = new BufferedReader(new FileReader("cars.txt"))) {
+            String line;
+            while ((line = br.readLine()) != null) {
+                line = line.trim();
+                if (line.isEmpty()) continue;
+                String[] p = line.split("\\|");
+                if (p.length == 6) {
+                    Car c = new Car(Integer.parseInt(p[0]), p[1], p[2], p[3],
+                            Double.parseDouble(p[4]), p[5]);
+                    list.add(c);
+                }
+            }
+            System.out.println("✅ Loaded " + list.size() + " cars from file");
+        } catch (Exception e) {
+            System.out.println("No cars.txt file yet or error loading");
+        }
+        return list;
     }
 }
