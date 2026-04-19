@@ -34,6 +34,8 @@ public class BookForm extends javax.swing.JFrame {
         setupTable();
         refreshAvailableCars();
         loadCustomersToCombo();
+        getContentPane().setBackground(new java.awt.Color(240, 248, 255)); // light blue background
+        setTitle("Car Rental System");
     }
     
     private void setupTable() {
@@ -122,16 +124,22 @@ public class BookForm extends javax.swing.JFrame {
 
         txtExpectedReturnDate.addActionListener(this::txtExpectedReturnDateActionPerformed);
 
+        btnCalculate.setBackground(new java.awt.Color(153, 204, 255));
         btnCalculate.setText("Calculate Total");
         btnCalculate.addActionListener(this::btnCalculateActionPerformed);
 
+        btnBook.setBackground(new java.awt.Color(153, 204, 255));
         btnBook.setText("Book now");
+        btnBook.setSize(new java.awt.Dimension(80, 25));
         btnBook.addActionListener(this::btnBookActionPerformed);
 
+        btnRefresh.setBackground(new java.awt.Color(153, 204, 255));
         btnRefresh.setText("Refresh Available Cars");
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
+        btnClose.setBackground(new java.awt.Color(153, 204, 255));
         btnClose.setText("Go Back");
+        btnClose.setPreferredSize(new java.awt.Dimension(81, 25));
         btnClose.addActionListener(this::btnCloseActionPerformed);
 
         lblTotal.setText("Total Amount: ₺0.00");
@@ -153,7 +161,7 @@ public class BookForm extends javax.swing.JFrame {
                                 .addGap(56, 56, 56)
                                 .addComponent(btnRefresh)
                                 .addGap(23, 23, 23)
-                                .addComponent(btnClose))
+                                .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(34, 34, 34)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -192,7 +200,7 @@ public class BookForm extends javax.swing.JFrame {
                         .addGap(32, 32, 32)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(btnRefresh)
-                            .addComponent(btnClose)))
+                            .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -211,7 +219,7 @@ public class BookForm extends javax.swing.JFrame {
                             .addComponent(lblTotal))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(btnBook)))
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addContainerGap(35, Short.MAX_VALUE))
         );
 
         pack();
@@ -273,30 +281,19 @@ public class BookForm extends javax.swing.JFrame {
     private void btnBookActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBookActionPerformed
         // TODO add your handling code here:
         int row = tblAvailableCars.getSelectedRow();
-        if (row == -1) {
-            JOptionPane.showMessageDialog(this, "Please select a car from the table!");
+        if (row == -1 || cmbCustomer.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Select car and customer!");
             return;
         }
 
-        if (cmbCustomer.getSelectedItem() == null || cmbCustomer.getSelectedItem().toString().contains("No customers")) {
-            JOptionPane.showMessageDialog(this, "Please select a customer!");
-            return;
-        }
 
-        try {
+        int confirm = JOptionPane.showConfirmDialog(this, 
+            "Proceed with payment and booking?", 
+            "Payment Confirmation", JOptionPane.YES_NO_OPTION);
+
+        if (confirm == JOptionPane.YES_OPTION) {
             int carId = (int) tableModel.getValueAt(row, 0);
-            String customerStr = cmbCustomer.getSelectedItem().toString();
-            int customerId = Integer.parseInt(customerStr.split(" - ")[0]);
-
-            String rentalDate = txtRentalDate.getText().trim();
-            String expectedReturn = txtExpectedReturnDate.getText().trim();
-
-            if (rentalDate.isEmpty() || expectedReturn.isEmpty()) {
-                JOptionPane.showMessageDialog(this, "Please enter Rental Date and Expected Return Date (YYYY-MM-DD)!");
-                return;
-            }
-
-            // Update car status to Rented
+            // Change car status to Rented
             for (Car c : dm.getCars()) {
                 if (c.getId() == carId) {
                     c.setStatus("Rented");
@@ -304,22 +301,9 @@ public class BookForm extends javax.swing.JFrame {
                 }
             }
 
-            // Since DataManager doesn't have saveCars() called automatically here, we need to trigger save
-            // For simplicity, we'll just show success (DataManager will save when form reloads)
-            JOptionPane.showMessageDialog(this, "✅ Booking Successful!\n" +
-                    "Car ID: " + carId + "\n" +
-                    "Customer ID: " + customerId + "\n" +
-                    "Rental Date: " + rentalDate);
-
-            // Refresh the available cars list
+            JOptionPane.showMessageDialog(this, "✅ Booking & Payment Successful!\nCar is now Rented.");
             refreshAvailableCars();
-
-            // Clear date fields
-            txtRentalDate.setText("");
-            txtExpectedReturnDate.setText("");
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Booking failed: " + e.getMessage());
+            lblTotal.setText("Total Amount: ₺0.00");
         }
     }//GEN-LAST:event_btnBookActionPerformed
 

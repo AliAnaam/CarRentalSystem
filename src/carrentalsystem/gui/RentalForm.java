@@ -31,6 +31,8 @@ public class RentalForm extends javax.swing.JFrame {
         initComponents();
         setupTable();
         refreshRentalsTable();
+        getContentPane().setBackground(new java.awt.Color(240, 248, 255)); // light blue background
+        setTitle("Car Rental System");
     }
     
     private void setupTable() {
@@ -94,13 +96,19 @@ public class RentalForm extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(jScrollPane1);
 
+        btnRefresh.setBackground(new java.awt.Color(153, 204, 255));
         btnRefresh.setText("Refresh List");
+        btnRefresh.setPreferredSize(new java.awt.Dimension(100, 25));
         btnRefresh.addActionListener(this::btnRefreshActionPerformed);
 
+        btnReturnSelected.setBackground(new java.awt.Color(153, 204, 255));
         btnReturnSelected.setText("Return Selected Rental");
+        btnReturnSelected.setPreferredSize(new java.awt.Dimension(164, 25));
         btnReturnSelected.addActionListener(this::btnReturnSelectedActionPerformed);
 
+        btnClose.setBackground(new java.awt.Color(153, 204, 255));
         btnClose.setText("Go Back");
+        btnClose.setPreferredSize(new java.awt.Dimension(81, 25));
         btnClose.addActionListener(this::btnCloseActionPerformed);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -111,11 +119,11 @@ public class RentalForm extends javax.swing.JFrame {
                 .addGap(76, 76, 76)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnRefresh)
+                        .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(109, 109, 109)
-                        .addComponent(btnReturnSelected)
+                        .addComponent(btnReturnSelected, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(78, 78, 78)
-                        .addComponent(btnClose))
+                        .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 508, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap(55, Short.MAX_VALUE))
         );
@@ -126,10 +134,10 @@ public class RentalForm extends javax.swing.JFrame {
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 244, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnRefresh)
-                    .addComponent(btnReturnSelected)
-                    .addComponent(btnClose))
-                .addContainerGap(53, Short.MAX_VALUE))
+                    .addComponent(btnRefresh, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnReturnSelected, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btnClose, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(51, Short.MAX_VALUE))
         );
 
         pack();
