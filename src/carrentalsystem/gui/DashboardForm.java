@@ -34,95 +34,53 @@ public class DashboardForm extends javax.swing.JFrame {
     private void initComponents() {
 
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
         btnManageCars = new javax.swing.JButton();
         btnManageCustomers = new javax.swing.JButton();
         btnNewBooking = new javax.swing.JButton();
         btnViewRentals = new javax.swing.JButton();
         btnLogout = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Helvetica Neue", 1, 20)); // NOI18N
         jLabel1.setText("CAR RENTAL SYSTEM");
-
-        jLabel2.setFont(new java.awt.Font("Helvetica Neue", 0, 16)); // NOI18N
-        jLabel2.setText("Welcome, Admin");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 10, -1, -1));
 
         btnManageCars.setBackground(new java.awt.Color(153, 204, 255));
         btnManageCars.setText("Manage Cars");
         btnManageCars.setPreferredSize(new java.awt.Dimension(107, 25));
         btnManageCars.addActionListener(this::btnManageCarsActionPerformed);
+        getContentPane().add(btnManageCars, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 120, 156, -1));
 
         btnManageCustomers.setBackground(new java.awt.Color(153, 204, 255));
         btnManageCustomers.setText("Manage Customers");
         btnManageCustomers.setPreferredSize(new java.awt.Dimension(143, 25));
         btnManageCustomers.addActionListener(this::btnManageCustomersActionPerformed);
+        getContentPane().add(btnManageCustomers, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 160, 156, -1));
 
         btnNewBooking.setBackground(new java.awt.Color(153, 204, 255));
         btnNewBooking.setText("New Booking");
         btnNewBooking.setPreferredSize(new java.awt.Dimension(107, 25));
         btnNewBooking.addActionListener(this::btnNewBookingActionPerformed);
+        getContentPane().add(btnNewBooking, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 200, 156, -1));
 
         btnViewRentals.setBackground(new java.awt.Color(153, 204, 255));
         btnViewRentals.setText("View / Return Rentals");
         btnViewRentals.setPreferredSize(new java.awt.Dimension(156, 25));
         btnViewRentals.addActionListener(this::btnViewRentalsActionPerformed);
+        getContentPane().add(btnViewRentals, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 240, -1, -1));
 
         btnLogout.setBackground(new java.awt.Color(153, 204, 255));
         btnLogout.setText("Logout");
         btnLogout.setPreferredSize(new java.awt.Dimension(80, 25));
         btnLogout.addActionListener(this::btnLogoutActionPerformed);
+        getContentPane().add(btnLogout, new org.netbeans.lib.awtextra.AbsoluteConstraints(24, 280, 156, -1));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnNewBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnViewRentals, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 95, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(btnManageCars, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(18, 18, 18)
-                                .addComponent(btnManageCustomers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(39, 39, 39)
-                                .addComponent(jLabel1)))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(112, 112, 112)
-                .addComponent(jLabel2)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addGap(18, 18, 18)
-                .addComponent(jLabel2)
-                .addGap(46, 46, 46)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnManageCars, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnManageCustomers, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(32, 32, 32)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNewBooking, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btnViewRentals, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addComponent(btnLogout, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(60, Short.MAX_VALUE))
-        );
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/carrentalsystem/gui/Dashboardimage.jpeg"))); // NOI18N
+        jLabel3.setText("jLabel3");
+        getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(290, 0, 540, 520));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -192,6 +150,6 @@ public class DashboardForm extends javax.swing.JFrame {
     private javax.swing.JButton btnNewBooking;
     private javax.swing.JButton btnViewRentals;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
     // End of variables declaration//GEN-END:variables
 }

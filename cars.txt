@@ -7,11 +7,11 @@
 7|Fiat|Egea Cross|34 FKP 006|1000.0|Rented
 8|Volkswagen|Polo|34 MGU 007|1450.0|Available
 9|Ford|Focus|34 ZFC 008|1400.0|Rented
-10|Renault|Captur|34 FAS 009|1500.0|Available
-11|Renault|Megane|34 XRG 010|1650.0|Rented
-12|Skoda|Scala|34 UJN 011|1800.0|Available
-13|Peugeot|408|ENP 012|1900.0|Maintenance
-14|Audi|A3|34 AUD 013|3000.0|Available
-15|Volvo|XC90|34 LFB 014|30000.0|Available
-16|BMW|5 Series|34 BMV 020|25000.0|Available
-17|Mercedes-Benz|C 200|34 MER 030|45000.0|Available
+10|Renault|Megane|34 XGR 009|1650.0|Rented
+11|BMW|Series 5|34 BMV 020|25000.0|Available
+12|Volvo|XC90|34 LFB 014|30000.0|Available
+13|Audi|A3|34 AUD 013|3500.0|Maintenance
+14|Mercedes-Benz|C 200|34 MER 030|45000.0|Available
+15|Skoda|Scala|34 UJN 011|1800.0|Available
+16|Audi|A5|34 APP 022|5500.0|Available
+17|BMW|520i|34 BBB 111|9000.0|Available

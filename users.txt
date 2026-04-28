@@ -1,2 +1,3 @@
 alifuad|1212|Ali Fuad
 alianaam|1234|Ali Anaam
+mazen|1234|Mazen Assad
